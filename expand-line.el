@@ -88,20 +88,10 @@ cursor in place."
   (expand-line-mode -1))
 
 (defadvice keyboard-quit (before expand-line-restore-point activate)
-  (if (memq last-command '(expand-line-mark-line
-                           expand-line-expand-previous-line
-                           expand-line-expand-next-line
-                           expand-line-contract-previous-line
-                           expand-line-contract-next-line))
+  (if expand-line-mode
       (progn
         (expand-line-restore-point)
         (expand-line-mode -1))))
-
-(defun expand-line (arg)
-  "Expand selection by line. If ARG is provided, select "
-  (interactive "p")
-
-  )
 
 ;; Keymap
 
