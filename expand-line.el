@@ -1,6 +1,6 @@
 ;;; expand-line.el --- Expand selection by line
 
-;; Copyright (C) 2015  Kai Yu
+;; Copyright (C) 2015 Zhang Kai Yu
 
 ;; Author: Kai Yu <yeannylam@gmail.com>
 ;; Keywords:
@@ -44,13 +44,7 @@
   (push-mark (point))
   (push-mark (line-beginning-position) nil t)
   (goto-char (line-end-position))
-  (expand-line-mode 1)
-  (add-hook 'deactivate-mark-hook 'turn-off-expand-line-mode))
-
-(defun turn-off-expand-line-mode ()
-  "Turn off `expand-line-mode'."
-  (expand-line-mode -1)
-  (remove-hook 'deactivate-mark-hook 'turn-off-expand-line-mode))
+  (expand-line-mode 1))
 
 (defun expand-line-expand-previous-line (arg)
   "Expand to previous line."
@@ -93,10 +87,27 @@ cursor in place."
         (expand-line-restore-point)
         (expand-line-mode -1))))
 
+;; On and off
+
+;;;###autoload
+(defun turn-on-expand-line-mode ()
+  "Turn on `expand-line-mode'."
+  (interactive)
+  (if mark-active
+      (progn
+        (expand-line-save-point)
+        (expand-line-mode 1))
+    (expand-line-mark-line)))
+
+(defun turn-off-expand-line-mode ()
+  "Turn off `expand-line-mode'."
+  (interactive)
+  (expand-line-mode -1))
+
 ;; Keymap
 
-(global-set-key (kbd "s-l") 'expand-line-mark-line)
-(global-set-key (kbd "C-c l") 'expand-line-mark-line)
+(global-set-key (kbd "s-l") 'turn-on-expand-line-mode)
+(global-set-key (kbd "C-c l") 'turn-on-expand-line-mode)
 
 (defvar expand-line-mode-map
   (let ((map (make-sparse-keymap)))
@@ -110,10 +121,14 @@ cursor in place."
 
 ;; Mode
 
+;;;###autoload
 (define-minor-mode expand-line-mode
   "Mode for easy expand line when expand line is activated."
   :keymap expand-line-mode-map
-  :lighter "EL")
+  :lighter "EL"
+  (if expand-line-mode
+      (add-hook 'deactivate-mark-hook 'turn-off-expand-line-mode)
+    (remove-hook 'deactivate-mark-hook 'turn-off-expand-line-mode)))
 
 (provide 'expand-line)
 ;;; expand-line.el ends here
