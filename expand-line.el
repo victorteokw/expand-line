@@ -52,33 +52,40 @@
   (expand-line-mode -1)
   (remove-hook 'deactivate-mark-hook 'turn-off-expand-line-mode))
 
-(defun expand-line-expand-previous-line ()
+(defun expand-line-expand-previous-line (arg)
   "Expand to previous line."
-  (interactive)
+  (interactive "p")
   (if (> (point) (mark))
       (exchange-point-and-mark))
-  (move-beginning-of-line 0))
+  (move-beginning-of-line (- 1 arg)))
 
-(defun expand-line-expand-next-line ()
+(defun expand-line-expand-next-line (arg)
   "Expand to next line."
-  (interactive)
+  (interactive "p")
   (if (< (point) (mark))
       (exchange-point-and-mark))
-  (move-end-of-line 2))
+  (move-end-of-line (+ arg 1)))
 
-(defun expand-line-contract-next-line ()
+(defun expand-line-contract-next-line (arg)
   "Contract to next line."
-  (interactive)
+  (interactive "p")
   (if (< (point) (mark))
       (exchange-point-and-mark))
-  (move-end-of-line 0))
+  (move-end-of-line (- 1 arg)))
 
-(defun expand-line-contract-previous-line ()
+(defun expand-line-contract-previous-line (arg)
   "Contract to previous line."
-  (interactive)
+  (interactive "p")
   (if (> (point) (mark))
       (exchange-point-and-mark))
-  (move-beginning-of-line 2))
+  (move-beginning-of-line (+ arg 1)))
+
+(defun expand-line-leave-point-in-place ()
+  "Just like `keyboard-quit' and deactivate region. But leave
+cursor in place."
+  (interactive)
+  (deactivate-mark)
+  (expand-line-mode -1))
 
 (defadvice keyboard-quit (before expand-line-restore-point activate)
   (if (memq last-command '(expand-line-mark-line
@@ -107,6 +114,7 @@
     (define-key map (kbd "C-n") 'expand-line-expand-next-line)
     (define-key map (kbd "M-n") 'expand-line-contract-previous-line)
     (define-key map (kbd "M-p") 'expand-line-contract-next-line)
+    (define-key map (kbd "M-g") 'expand-line-leave-point-in-place)
     map)
   "Keymap for Projectile mode.")
 
@@ -114,7 +122,8 @@
 
 (define-minor-mode expand-line-mode
   "Mode for easy expand line when expand line is activated."
-  :keymap expand-line-mode-map)
+  :keymap expand-line-mode-map
+  :lighter "EL")
 
 (provide 'expand-line)
 ;;; expand-line.el ends here
