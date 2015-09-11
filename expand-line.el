@@ -125,7 +125,7 @@ cursor in place."
 (define-minor-mode expand-line-mode
   "Mode for easy expand line when expand line is activated."
   :keymap expand-line-mode-map
-  :lighter "EL"
+  :lighter " EL"
   (if expand-line-mode
       (add-hook 'deactivate-mark-hook 'turn-off-expand-line-mode)
     (remove-hook 'deactivate-mark-hook 'turn-off-expand-line-mode)))
