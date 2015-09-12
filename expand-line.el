@@ -106,9 +106,6 @@ cursor in place."
 
 ;; Keymap
 
-(global-set-key (kbd "s-l") 'turn-on-expand-line-mode)
-(global-set-key (kbd "C-c l") 'turn-on-expand-line-mode)
-
 (defvar expand-line-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-p") 'expand-line-expand-previous-line)
@@ -117,7 +114,7 @@ cursor in place."
     (define-key map (kbd "M-p") 'expand-line-contract-next-line)
     (define-key map (kbd "M-g") 'expand-line-leave-point-in-place)
     map)
-  "Keymap for Projectile mode.")
+  "Keymap for expand-line mode.")
 
 ;; Mode
 
