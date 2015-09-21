@@ -1,4 +1,4 @@
-Expand line
+Expand line [![MELPA](http://melpa.org/packages/expand-line-badge.svg)](http://melpa.org/#/expand-line)
 ===========
 
 Expand line works like `expand-region`, instead of `region`, this package expand `line`.
