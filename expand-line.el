@@ -44,6 +44,7 @@
   (push-mark (point))
   (push-mark (line-beginning-position) nil t)
   (goto-char (line-end-position))
+  (if (char-after) (forward-char))
   (expand-line-mode 1))
 
 (defun expand-line-expand-previous-line (arg)
@@ -58,14 +59,16 @@
   (interactive "p")
   (if (< (point) (mark))
       (exchange-point-and-mark))
-  (move-end-of-line (+ arg 1)))
+  (move-end-of-line arg)
+  (if (char-after) (forward-char)))
 
 (defun expand-line-contract-next-line (arg)
   "Contract to next line."
   (interactive "p")
   (if (< (point) (mark))
       (exchange-point-and-mark))
-  (move-end-of-line (- 1 arg)))
+  (move-end-of-line (- arg))
+  (if (char-after) (forward-char)))
 
 (defun expand-line-contract-previous-line (arg)
   "Contract to previous line."
